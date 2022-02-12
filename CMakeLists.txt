@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.19)
-project(my_application LANGUAGES CXX)
+project(slinty_bindy LANGUAGES CXX)
 
 find_package(Slint QUIET)
 if (NOT Slint_FOUND)
@@ -28,6 +28,6 @@ endif (NOT KDBindings_FOUND)
 
 
 
-add_executable(my_application src/main.cpp)
-target_link_libraries(my_application PRIVATE Slint::Slint KDAB::KDBindings)
-slint_target_sources(my_application ui/appwindow.slint)
+add_executable(slinty_bindy src/main.cpp)
+target_link_libraries(slinty_bindy PRIVATE Slint::Slint KDAB::KDBindings)
+slint_target_sources(slinty_bindy ui/appwindow.slint)
