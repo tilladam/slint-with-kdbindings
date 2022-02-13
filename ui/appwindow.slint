@@ -1,17 +1,32 @@
-import { Button, VerticalBox } from "std-widgets.slint";
+import { Button, VerticalBox, HorizontalBox, StandardListView } from "std-widgets.slint";
 
 export AppWindow := Window {
     property<int> counter: 42;
+    property<bool> undoPossible: false;
     callback request-increase-value();
-    VerticalBox { 
-        Text {
-            text: "Counter: \{counter}";
-        }
-        Button {
-            text: "Increase value";
-            clicked => { 
-                request-increase-value();
+    callback request-undo();
+    HorizontalBox {
+        VerticalBox { 
+            Text {
+                text: "Counter: \{counter}";
+            }
+            Button {
+                text: "Increase value";
+                clicked => { 
+                    request-increase-value();
+                }
+            }
+            Button {
+                text: "Undo";
+                enabled: undoPossible;
+                clicked => { 
+                    request-undo();
+                }
             }
         }
-     }
+        StandardListView {
+            width: 200px;
+
+         }
+    }
 }
