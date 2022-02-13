@@ -28,6 +28,9 @@ endif (NOT KDBindings_FOUND)
 
 
 
-add_executable(slinty_bindy src/main.cpp)
+add_executable(slinty_bindy 
+src/main.cpp
+src/backend_controller.cpp
+)
 target_link_libraries(slinty_bindy PRIVATE Slint::Slint KDAB::KDBindings)
 slint_target_sources(slinty_bindy ui/appwindow.slint)
