@@ -1,28 +1,51 @@
-#include "appwindow.h"
+
 
 #include <kdbindings/signal.h>
 
 #include <iostream>
 #include <string>
 
+#include "appwindow.h"
+#include "backend_controller.h"
+
 using namespace KDBindings;
 
 int main(int argc, char **argv)
 {
     auto ui = AppWindow::create();
+    auto controller = Controller();
 
-    // Create new signal
+    // Create new signal, superfluous, we could connect directly to the 
+    // property's valueChanged, this just adds intermediate information
+    // for purposes of illustration
     Signal<std::string, int> signal;
 
-    // Connect a lambda
+    // when the signal is emitted, we produce output and update the UI
     signal.connect([ui](std::string arg1, int arg2) {
         std::cout << arg1 << " " << arg2 << std::endl;
         ui->set_counter(arg2);
     });
 
-    ui->on_request_increase_value([&]{
-      // Emit the signal and the lambda is called
-      signal.emit("New counter value is:", ui->get_counter() + 1);
+    // when the controller tells us that the thingie changed, we
+    // emit an annotated signal
+    controller.thingie.valueChanged().connect([&](const int &newValue) {
+        signal.emit("New counter value is:", newValue );
+    });
+
+    controller.undoPossible.valueChanged().connect([ui](const bool &newValue){
+        // the controller says undo availability changed, update UI state
+        ui->set_undoPossible(newValue);
+    });
+
+    // the UI is calling this callback as a result of a click event
+    ui->on_request_increase_value([&controller]{
+      // tell the controller to increment the value
+      controller.thingie.set(controller.thingie.get() + 1);
+    });
+
+    // the UI wants to trigger and undo
+    ui->on_request_undo([&controller]{
+      controller.undo();
     });
 
     ui->run();
