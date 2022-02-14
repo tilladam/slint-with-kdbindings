@@ -8,6 +8,7 @@ Controller::Controller()
             return;
         std::cout << "Value is about to change, old value is: " << oldValue << std::endl;
         mUndoStack.push(oldValue);
+        valueAdded.emit(oldValue);
         undoPossible.set(true);
     });
 
@@ -17,8 +18,10 @@ void Controller::undo()
 {
     if ( mUndoStack.empty() )
         return;
-    thingie.set( mUndoStack.top() );
+    auto v = mUndoStack.top();
+    thingie.set(v);
     mUndoStack.pop();
+    valueUndone.emit(v);
     if ( mUndoStack.empty() )
         undoPossible.set( false );
 }

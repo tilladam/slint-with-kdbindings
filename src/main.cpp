@@ -3,10 +3,12 @@
 #include <kdbindings/signal.h>
 
 #include <iostream>
+#include <memory>
 #include <string>
 
 #include "appwindow.h"
 #include "backend_controller.h"
+#include "undostack_model.h"
 
 using namespace KDBindings;
 
@@ -14,6 +16,11 @@ int main(int argc, char **argv)
 {
     auto ui = AppWindow::create();
     auto controller = Controller();
+    
+    // create a model that adapts the controller state for display
+    auto model = UndoStackModel(controller);
+    // set the model on the listview
+    ui->set_model(std::shared_ptr<UndoStackModel>(&model));
 
     // Create new signal, superfluous, we could connect directly to the 
     // property's valueChanged, this just adds intermediate information

@@ -31,6 +31,9 @@ endif (NOT KDBindings_FOUND)
 add_executable(slinty_bindy 
 src/main.cpp
 src/backend_controller.cpp
+src/backend_controller.h
+src/undostack_model.cpp
+src/undostack_model.h
 )
 target_link_libraries(slinty_bindy PRIVATE Slint::Slint KDAB::KDBindings)
 slint_target_sources(slinty_bindy ui/appwindow.slint)

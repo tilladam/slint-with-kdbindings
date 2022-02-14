@@ -3,6 +3,7 @@ import { Button, VerticalBox, HorizontalBox, StandardListView } from "std-widget
 export AppWindow := Window {
     property<int> counter: 42;
     property<bool> undoPossible: false;
+    property<[StandardListViewItem]> model;
     callback request-increase-value();
     callback request-undo();
     HorizontalBox {
@@ -24,9 +25,15 @@ export AppWindow := Window {
                 }
             }
         }
-        StandardListView {
-            width: 200px;
+        VerticalBox {
+            Text {
+                text: "Undo Stack";
+            } 
+            UndoStackView := StandardListView {
+                width: 200px;
+                model <=> root.model;
 
-         }
+            }
+        }
     }
 }
